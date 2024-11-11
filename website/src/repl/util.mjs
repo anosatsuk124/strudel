@@ -11,8 +11,8 @@ import { $featuredPatterns, loadDBPatterns } from '@src/user_pattern_utils.mjs';
 
 // Create a single supabase client for interacting with your database
 export const supabase = createClient(
-  'https://pidxdsxphlhzjnzmifth.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZHhkc3hwaGxoempuem1pZnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTYyMzA1NTYsImV4cCI6MTk3MTgwNjU1Nn0.bqlw7802fsWRnqU5BLYtmXk_k-D1VFmbkHMywWc15NM',
+  'https://ysulwkeawvwaqygdnscv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzdWx3a2Vhd3Z3YXF5Z2Ruc2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEzNjAyMjgsImV4cCI6MjA0NjkzNjIyOH0.Xt7mXi1qwAc-NLTp2oweLJjsKeH6gTmseJDvw3u1al8',
 );
 
 let dbLoaded;
@@ -118,8 +118,7 @@ export async function shareCode(codeToShare) {
   ).then(async (isPublic) => {
     const hash = nanoid(12);
     const shareUrl = window.location.origin + window.location.pathname + '?' + hash;
-    // const { error } = await supabase.from('code_v1').insert([{ code: codeToShare, hash, ['public']: isPublic }]);
-    const error = null;
+    const { error } = await supabase.from('code_v1').insert([{ code: codeToShare, hash, ['public']: isPublic }]);
     if (!error) {
       lastShared = codeToShare;
       // copy shareUrl to clipboard
