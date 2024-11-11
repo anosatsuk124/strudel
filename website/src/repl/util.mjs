@@ -118,8 +118,7 @@ export async function shareCode(codeToShare) {
   ).then(async (isPublic) => {
     const hash = nanoid(12);
     const shareUrl = window.location.origin + window.location.pathname + '?' + hash;
-    const { error } = await supabase.from('code_v1').insert([{ code: codeToShare, hash, ['public']: isPublic }]);
-    if (!error) {
+    if (true) {
       lastShared = codeToShare;
       // copy shareUrl to clipboard
       if (isTauri()) {
