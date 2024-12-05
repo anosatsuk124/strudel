@@ -36,6 +36,8 @@ import './Repl.css';
 import { setInterval, clearInterval } from 'worker-timers';
 import { getMetadata } from '../metadata_parser';
 
+import { hotReloadWithWebSocketEvent } from '@anosatsuk124/import-js/import.mjs';
+
 const { latestCode } = settingsMap.get();
 let modulesLoading, presets, drawContext, clearCanvas, audioReady;
 
@@ -55,8 +57,22 @@ async function getModule(name) {
   return modules.find((m) => m.packageName === name);
 }
 
+const initWebSocket = (wsUrl, { setCodeFn, updateFn }) => {
+  const ws = new WebSocket(wsUrl);
+
+  ws.onopen = () => {
+    logger(`WebSocket Client Connected: ${wsUrl}`);
+  };
+
+  ws.onmessage = async (e) => {
+    const { reload, code } = JSON.parse(e.data);
+    logger(`WebSocket message received: ${reload ? 'reload' : 'update'}`);
+    await hotReloadWithWebSocketEvent({ reload, code }, setCodeFn, updateFn);
+  };
+};
+
 export function useReplContext() {
-  const { isSyncEnabled, audioEngineTarget } = useSettings();
+  const { isSyncEnabled, audioEngineTarget, webSocketHotReloadUrl, isWebSocketHotReloadEnabled } = useSettings();
   const shouldUseWebaudio = audioEngineTarget !== audioEngineTargets.osc;
   const defaultOutput = shouldUseWebaudio ? webaudioOutput : superdirtOutput;
   const getTime = shouldUseWebaudio ? getAudioContextCurrentTime : getPerformanceTimeSeconds;
@@ -139,6 +155,13 @@ export function useReplContext() {
     });
 
     editorRef.current = editor;
+
+    if (isWebSocketHotReloadEnabled) {
+      initWebSocket(webSocketHotReloadUrl, {
+        setCodeFn: (text) => window.strudelMirror.setCode(text),
+        updateFn: () => window.strudelMirror.evaluate(),
+      });
+    }
   }, []);
 
   const [replState, setReplState] = useState({});

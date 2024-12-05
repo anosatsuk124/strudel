@@ -40,6 +40,8 @@ export const defaultSettings = {
   audioEngineTarget: audioEngineTargets.webaudio,
   isButtonRowHidden: false,
   isCSSAnimationDisabled: false,
+  isWebSocketHotReloadEnabled: false,
+  webSocketHotReloadUrl: 'ws://localhost:5432/ws',
 };
 
 let search = null;
@@ -83,6 +85,8 @@ export function useSettings() {
     isPanelPinned: parseBoolean(state.isPanelPinned),
     isPanelOpen: parseBoolean(state.isPanelOpen),
     userPatterns: userPatterns,
+    isWebSocketHotReloadEnabled: parseBoolean(state.isWebSocketHotReloadEnabled),
+    webSocketHotReloadUrl: state.webSocketHotReloadUrl,
   };
 }
 

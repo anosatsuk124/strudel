@@ -1,0 +1,29 @@
+{
+  "name": "@anosatsuk124/import-js",
+  "version": "0.1.0",
+  "description": "Import local JS files in the browser",
+  "main": "index.mjs",
+  "type": "module",
+  "publishConfig": {
+    "main": "dist/index.mjs"
+  },
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "titdalcycles",
+    "strudel",
+    "pattern",
+    "livecoding",
+    "algorave"
+  ],
+  "author": "Satsuki Akiba <anosatsuk124@gmail.com>",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@strudel/transpiler": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
+  }
+}

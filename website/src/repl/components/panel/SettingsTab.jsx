@@ -15,6 +15,19 @@ function Checkbox({ label, value, onChange, disabled = false }) {
   );
 }
 
+function TextInput({ label, value, onChange }) {
+  return (
+    <label>
+      {' ' + label}
+      <input
+        className="p-2 bg-background rounded-md text-foreground"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </label>
+  );
+}
+
 function SelectInput({ value, options, onChange }) {
   return (
     <select
@@ -104,11 +117,25 @@ export function SettingsTab({ started }) {
     audioDeviceName,
     audioEngineTarget,
     togglePanelTrigger,
+    isWebSocketHotReloadEnabled,
+    webSocketHotReloadUrl,
   } = useSettings();
   const shouldAlwaysSync = isUdels();
   const canChangeAudioDevice = AudioContext.prototype.setSinkId != null;
   return (
     <div className="text-foreground p-4 space-y-4 w-full">
+      <FormItem label="Hot Reloading">
+        <Checkbox
+          label="Enable WebSocket Hot Reloading"
+          onChange={(cbEvent) => settingsMap.setKey('isWebSocketHotReloadEnabled', cbEvent.target.checked)}
+          value={isWebSocketHotReloadEnabled}
+        />
+        <TextInput
+          label="WebSocket URL: "
+          value={webSocketHotReloadUrl}
+          onChange={(url) => settingsMap.setKey('webSocketHotReloadUrl', url)}
+        />
+      </FormItem>
       {canChangeAudioDevice && (
         <FormItem label="Audio Output Device">
           <AudioDeviceSelector
